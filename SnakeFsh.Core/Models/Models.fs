@@ -37,7 +37,7 @@ type Cell =
     | WithSnake of SnakeCell
     | WithFood
     | Border
-    
+
 type Field = {
     Cells: Cell list list
 }
@@ -45,26 +45,26 @@ type Field = {
 type CollisionType =
     | WithBorder
     | WithSelf
-    
+
 type OngoingState = {
     Field: Field
     Snake: Snake
 }
-    
+
 type GameState =
     | WaitForStart
     | OngoingGame of OngoingState
     | GameOver of CollisionType
-    
+
 type LengthUpdate =
     | Grows
     | StaysSameSize
 
-type Changes = {
+type SnakeChanges = {
     GrowSize: LengthUpdate
     NewHead: Coordinates
 }
 
 type Update =
     | Collided of CollisionType
-    | CanGo of Changes
+    | CanGo of SnakeChanges
