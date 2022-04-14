@@ -39,7 +39,7 @@ type Cell =
     | Border
 
 type Field = {
-    Cells: Cell list list
+    Cells: Cell array array
 }
 
 type CollisionType =

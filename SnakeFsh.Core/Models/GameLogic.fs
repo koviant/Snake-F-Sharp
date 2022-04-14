@@ -17,10 +17,12 @@ let private getDefaultState startData =
             Tail = head
         }
 
-    let getDefaultField size = {
-        Cells = [ for _ in 0..size ->
-                    [ for _ in 0..size -> Cell.WithNone ] ]
-        }
+    let getDefaultField size =
+        let getNoneList _ =
+            [|0..size|]
+            |> Array.map (fun _ -> Cell.WithNone)
+        
+        { Cells = [|0..size|] |> Array.map getNoneList } 
 
     { Field = getDefaultField startData.FieldSize
       Snake = getStartSnake startData.Head }
@@ -63,9 +65,9 @@ let private updateField oldField updatedSnake =
         | WithNone | WithFood | Border -> cell
         | WithSnake snakePart -> mapSnakeCell i j cell snakePart
 
-    let mapRow i = List.mapi (mapCell i)
+    let mapRow i = Array.mapi (mapCell i)
 
-    { Cells = oldField.Cells |> List.mapi mapRow }
+    { Cells = oldField.Cells |> Array.mapi mapRow }
 
 let generateState oldState updatedSnake = {
         Snake = updatedSnake
