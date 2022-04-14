@@ -18,11 +18,10 @@ let private getDefaultState startData =
         }
 
     let getDefaultField size =
-        let getNoneList _ =
-            [|0..size|]
-            |> Array.map (fun _ -> Cell.WithNone)
+        let getNoneCellArray _ =
+            Array.create size Cell.WithNone
         
-        { Cells = [|0..size|] |> Array.map getNoneList } 
+        { Cells =  Array.init size getNoneCellArray } 
 
     { Field = getDefaultField startData.FieldSize
       Snake = getStartSnake startData.Head }
