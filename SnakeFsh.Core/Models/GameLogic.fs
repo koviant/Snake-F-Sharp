@@ -50,8 +50,7 @@ let private updateField oldField updatedSnake =
         i <> updatedSnake.Tail.X &&
         j <> updatedSnake.Tail.Y
 
-    let mapSnakeCell i j cell snakePart =
-        match snakePart with
+    let mapSnakeCell i j cell = function
         | Head dir when updatedSnake.Body.Length > 1 -> Cell.WithSnake <| Body dir
         | Head _ -> cell
         | Tail _ when notNewTail i j  -> Cell.WithNone
@@ -59,23 +58,22 @@ let private updateField oldField updatedSnake =
         | Body _ when notNewTail i j -> cell
         | Body dir -> Cell.WithSnake <| Tail dir
 
-    {
-        Cells = [ for i in 0..oldField.Cells.Length ->
-                    [ for j in 0..oldField.Cells.Length ->
-                        match oldField.Cells[i][j] with
-                        | WithNone | WithFood | Border -> oldField.Cells[i][j]
-                        | WithSnake part -> mapSnakeCell i j oldField.Cells.[i].[j] part
-                    ]
-                ]
-    }
+    let mapCell i j cell =
+        match cell with
+        | WithNone | WithFood | Border -> cell
+        | WithSnake snakePart -> mapSnakeCell i j cell snakePart
+
+    let mapRow i = List.mapi (mapCell i)
+
+    { Cells = oldField.Cells |> List.mapi mapRow }
 
 let generateState oldState updatedSnake = {
         Snake = updatedSnake
         Field = updateField oldState.Field updatedSnake
     } 
 
-let private createState oldState changes =
-    updateSnake oldState.Snake changes
+let private createState oldState snakeChanges =
+    updateSnake oldState.Snake snakeChanges
     |> generateState oldState
 
 [<CompiledName "GetStartState">]
@@ -83,8 +81,7 @@ let getStartState = getDefaultHead >> getDefaultState
 
 [<CompiledName "Update">]
 let update state direction =
-    let getNewHead head direction =
-        match direction with
+    let getNewHead head = function
         | Up -> { head with X = head.X - 1 }
         | Down -> { head with X = head.X + 1 }
         | Left -> { head with Y = head.Y - 1 }
@@ -94,4 +91,4 @@ let update state direction =
     |> getUpdate state.Field
     |> function
     | Collided collisionType -> GameOver collisionType
-    | CanGo changes -> OngoingGame <| createState state changes
+    | CanGo snakeChanges -> OngoingGame <| createState state snakeChanges
