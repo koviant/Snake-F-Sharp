@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SnakeFsh.Core", "SnakeFsh.Core\SnakeFsh.Core.fsproj", "{0F959EFF-5A27-447C-B9FB-A9DD518CA30D}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SnakeFsh.Tests", "SnakeFsh.Tests\SnakeFsh.Tests.fsproj", "{221EA009-DF83-47C7-A564-DE907F005D27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,6 +14,10 @@ Global
 		{0F959EFF-5A27-447C-B9FB-A9DD518CA30D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F959EFF-5A27-447C-B9FB-A9DD518CA30D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F959EFF-5A27-447C-B9FB-A9DD518CA30D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{221EA009-DF83-47C7-A564-DE907F005D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{221EA009-DF83-47C7-A564-DE907F005D27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{221EA009-DF83-47C7-A564-DE907F005D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{221EA009-DF83-47C7-A564-DE907F005D27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
