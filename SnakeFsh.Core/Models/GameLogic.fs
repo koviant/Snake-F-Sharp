@@ -3,7 +3,7 @@ module Snake.Core.GameLogic
 open Snake.Core.Models
 
 let private getDefaultHead fieldSize = {
-        Head = {
+        SnakeHead = {
             X = fieldSize / 2
             Y = fieldSize / 2
         }
@@ -11,20 +11,27 @@ let private getDefaultHead fieldSize = {
     }
 
 let private getDefaultState startData =
-    let getStartSnake head = {
-            Head = head
-            Body = [head]
-            Tail = head
+    let getStartSnake = {
+            Head = startData.SnakeHead
+            Body = [startData.SnakeHead]
+            Tail = startData.SnakeHead
         }
 
-    let getDefaultField size =
-        let getNoneCellArray _ =
-            Array.create size Cell.WithNone
+    let getDefaultField =
+        let isSnakeHead i j =
+            i <> startData.SnakeHead.X &&
+            j <> startData.SnakeHead.Y
         
-        { Cells =  Array.init size getNoneCellArray } 
+        let mapCell i j =
+            if isSnakeHead i j then Cell.WithSnake <| Head Up else Cell.WithNone
+        
+        let getNoneCellArray i =
+            Array.init startData.FieldSize (mapCell i)
+        
+        { Cells =  Array.init startData.FieldSize getNoneCellArray } 
 
-    { Field = getDefaultField startData.FieldSize
-      Snake = getStartSnake startData.Head }
+    { Field = getDefaultField
+      Snake = getStartSnake }
 
 let private getUpdate field newHead =
     match field.Cells[newHead.X][newHead.Y] with

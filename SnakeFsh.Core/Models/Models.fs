@@ -12,7 +12,7 @@ type Coordinates = {
 }
 
 type StartData = {
-    Head: Coordinates
+    SnakeHead: Coordinates
     FieldSize: int
 }
 
