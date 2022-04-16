@@ -11,16 +11,16 @@ let private getDefaultHead fieldSize = {
     }
 
 let private getDefaultState startData =
-    let getStartSnake = {
+    let getStartSnake() = {
             Head = startData.SnakeHead
             Body = [startData.SnakeHead]
             Tail = startData.SnakeHead
         }
 
-    let getDefaultField =
+    let getDefaultField() =
         let isSnakeHead i j =
-            i <> startData.SnakeHead.X &&
-            j <> startData.SnakeHead.Y
+            i = startData.SnakeHead.X &&
+            j = startData.SnakeHead.Y
         
         let mapCell i j =
             if isSnakeHead i j then Cell.WithSnake <| Head Up else Cell.WithNone
@@ -30,8 +30,8 @@ let private getDefaultState startData =
         
         { Cells =  Array.init startData.FieldSize getNoneCellArray } 
 
-    { Field = getDefaultField
-      Snake = getStartSnake }
+    { Field = getDefaultField()
+      Snake = getStartSnake() }
 
 let private getUpdate field newHead =
     match field.Cells[newHead.X][newHead.Y] with
@@ -71,7 +71,8 @@ let private updateField oldField updatedSnake =
         | WithNone | WithFood | Border -> cell
         | WithSnake snakePart -> mapSnakeCell i j cell snakePart
 
-    let mapRow i = Array.mapi (mapCell i)
+    let mapRow i =
+        Array.mapi (mapCell i)
 
     { Cells = oldField.Cells |> Array.mapi mapRow }
 
