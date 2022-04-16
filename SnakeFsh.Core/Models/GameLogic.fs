@@ -55,7 +55,7 @@ let private updateSnake snake changes =
 
 let private updateField oldField updatedSnake =
     let notNewTail i j =
-        i <> updatedSnake.Tail.X &&
+        i <> updatedSnake.Tail.X ||
         j <> updatedSnake.Tail.Y
 
     let mapSnakeCell i j cell = function
