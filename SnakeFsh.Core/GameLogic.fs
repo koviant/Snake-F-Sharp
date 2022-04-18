@@ -1,6 +1,7 @@
 module Snake.Core.GameLogic
 
 open Snake.Core.Models
+open Snake.Core.Helpers.CoordinatesOperations
 
 let private getDefaultHead fieldSize = {
         SnakeHead = {
@@ -18,15 +19,14 @@ let private getDefaultState startData =
         }
 
     let getDefaultField() =
-        let isSnakeHead i j =
-            i = startData.SnakeHead.X &&
-            j = startData.SnakeHead.Y
+        let isSnakeHead x y =
+            sameAsTuple startData.SnakeHead (x, y)
         
-        let mapCell i j =
-            if isSnakeHead i j then Cell.WithSnake <| Head Up else Cell.WithNone
+        let mapCell x y =
+            if isSnakeHead x y then Cell.WithSnake <| Head Up else Cell.WithNone
         
-        let getNoneCellArray i =
-            Array.init startData.FieldSize (mapCell i)
+        let getNoneCellArray x =
+            Array.init startData.FieldSize (mapCell x)
         
         { Cells =  Array.init startData.FieldSize getNoneCellArray } 
 
@@ -54,25 +54,24 @@ let private updateSnake snake changes =
       Body = newBody }
 
 let private updateField oldField updatedSnake =
-    let notNewTail i j =
-        i <> updatedSnake.Tail.X ||
-        j <> updatedSnake.Tail.Y
+    let notNewTail x y =
+        not <| sameAsTuple updatedSnake.Tail (x, y)
 
-    let mapSnakeCell i j cell = function
+    let mapSnakeCell x y cell = function
         | Head dir when updatedSnake.Body.Length > 1 -> Cell.WithSnake <| Body dir
         | Head _ -> cell
-        | Tail _ when notNewTail i j  -> Cell.WithNone
+        | Tail _ when notNewTail x y  -> Cell.WithNone
         | Tail _ -> cell
-        | Body _ when notNewTail i j -> cell
+        | Body _ when notNewTail x y -> cell
         | Body dir -> Cell.WithSnake <| Tail dir
 
-    let mapCell i j cell =
+    let mapCell x y cell =
         match cell with
         | WithNone | WithFood | Border -> cell
-        | WithSnake snakePart -> mapSnakeCell i j cell snakePart
+        | WithSnake snakePart -> mapSnakeCell x y cell snakePart
 
-    let mapRow i =
-        Array.mapi (mapCell i)
+    let mapRow x =
+        Array.mapi (mapCell x)
 
     { Cells = oldField.Cells |> Array.mapi mapRow }
 

@@ -6,8 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Include="Models\Models.fs" />
-      <Compile Include="Models\GameLogic.fs" />
+      <Compile Include="Models.fs" />
+      <Compile Include="CoordinatesOperations.fs" />
+      <Compile Include="GameLogic.fs" />
     </ItemGroup>
 
 </Project>
